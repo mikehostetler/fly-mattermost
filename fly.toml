@@ -1,0 +1,29 @@
+[build]
+  image = "mattermost/mattermost-team-edition:latest"
+
+[env]
+  # https://docs.mattermost.com/configure/environment-configuration-settings.html
+  APP_PORT = "8065"
+  RESTART_POLICY = "unless-stopped"
+  TZ = "UTC"
+  MM_METRICSSETTINGS_ENABLE = "true"
+  MM_METRICSSETTINGS_LISTENADDRESS = ":9000"
+
+[[mounts]]
+  source = "mattermost_data"
+  destination = "/mattermost/data"
+
+[http_service]
+  internal_port = 8065
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+  [http_service.concurrency]
+    type = "requests"
+    hard_limit = 250
+    soft_limit = 200
+
+[metrics]
+  port = 9000
+  path = "/metrics"
